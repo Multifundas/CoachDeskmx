@@ -1,0 +1,19 @@
+project_id = "coachdeskmx"
+
+[db]
+port = 54322
+major_version = 15
+
+[db.seed]
+enabled = true
+sql_paths = ["./seed.sql"]
+
+[auth]
+enabled = true
+site_url = "http://localhost:3000"
+
+[studio]
+enabled = true
+
+[storage]
+enabled = true

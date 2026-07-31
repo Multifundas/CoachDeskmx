@@ -1,0 +1,97 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Paleta "Hielo" (por defecto, más viva). Cada paleta redefine estos 6 tokens;
+     todo el UI referencia estas variables vía tailwind.config.ts, así que cambiar
+     de tema = redefinir estas variables (ver bloques [data-theme] abajo). */
+  --hielo: #eef6fb;
+  --tinta: #10263a;
+  --filo: #4f7291;
+  --profundo: #1390a8;
+  --alerta: #e04a2f;
+  --logro: #17a06e;
+
+  --background: var(--hielo);
+  --foreground: var(--tinta);
+}
+
+/* Menta — verdes/teal frescos */
+[data-theme="menta"] {
+  --hielo: #ecf8f2;
+  --tinta: #12312a;
+  --filo: #4e7d6d;
+  --profundo: #0fa678;
+  --alerta: #e0623a;
+  --logro: #2bb37f;
+
+  --background: var(--hielo);
+  --foreground: var(--tinta);
+}
+
+/* Durazno — coral/melocotón cálido */
+[data-theme="durazno"] {
+  --hielo: #fff3ec;
+  --tinta: #3a2016;
+  --filo: #9a6b57;
+  --profundo: #ef7a4d;
+  --alerta: #d23b3b;
+  --logro: #2fa07a;
+
+  --background: var(--hielo);
+  --foreground: var(--tinta);
+}
+
+/* Lila — violeta/lavanda */
+[data-theme="lila"] {
+  --hielo: #f4f0fb;
+  --tinta: #241a3a;
+  --filo: #6f5f95;
+  --profundo: #7c5cdf;
+  --alerta: #d5455f;
+  --logro: #2f9d84;
+
+  --background: var(--hielo);
+  --foreground: var(--tinta);
+}
+
+/* Cielo — azul brillante amigable */
+[data-theme="cielo"] {
+  --hielo: #ecf3ff;
+  --tinta: #122344;
+  --filo: #52689a;
+  --profundo: #2f6df0;
+  --alerta: #e0492f;
+  --logro: #18a06e;
+
+  --background: var(--hielo);
+  --foreground: var(--tinta);
+}
+
+@layer base {
+  html {
+    color-scheme: light;
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-inter-tight), system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-archivo), system-ui, sans-serif;
+  }
+
+  /* Cifras monetarias y tabulares */
+  .tabular,
+  .money {
+    font-family: var(--font-ibm-plex-mono), ui-monospace, monospace;
+    font-variant-numeric: tabular-nums;
+  }
+}

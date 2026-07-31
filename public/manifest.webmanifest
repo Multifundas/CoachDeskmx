@@ -1,0 +1,24 @@
+{
+  "name": "CoachDeskmx",
+  "short_name": "CoachDeskmx",
+  "description": "Gestión para maestras de patinaje artístico sobre hielo en México.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f2f7fa",
+  "theme_color": "#1b6e80",
+  "lang": "es-MX",
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
