@@ -3,6 +3,7 @@
 // Server Actions de autenticación con Supabase Auth (magic link / OTP por correo).
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { getSesion, rutaInicioPorRol } from "@/lib/auth/session";
 
 export interface LoginState {
   error: string | null;
@@ -51,6 +52,38 @@ export async function enviarMagicLink(
 
   // Respuesta neutra: no revelamos si el correo existe.
   return { error: null, ok: true, email };
+}
+
+/**
+ * Inicio de sesión con correo y contraseña. Pensado para cuentas de prueba y
+ * acceso rápido mientras el envío de magic link por correo no esté disponible.
+ */
+export async function iniciarConPassword(
+  _prev: LoginState,
+  formData: FormData,
+): Promise<LoginState> {
+  const email = String(formData.get("email") ?? "")
+    .trim()
+    .toLowerCase();
+  const password = String(formData.get("password") ?? "");
+
+  if (!EMAIL_RE.test(email)) {
+    return { error: "Ingresa un correo válido.", ok: false, email };
+  }
+  if (password.length < 6) {
+    return { error: "La contraseña es muy corta.", ok: false, email };
+  }
+
+  const supabase = createClient();
+  const { error } = await supabase.auth.signInWithPassword({ email, password });
+
+  if (error) {
+    return { error: "Correo o contraseña incorrectos.", ok: false, email };
+  }
+
+  // Enviar al panel según el rol resuelto por la sesión.
+  const sesion = await getSesion();
+  redirect(sesion ? rutaInicioPorRol(sesion.rol) : "/login");
 }
 
 export async function logoutAction(): Promise<void> {

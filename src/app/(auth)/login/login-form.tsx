@@ -1,7 +1,11 @@
 "use client";
 
 import { useFormState, useFormStatus } from "react-dom";
-import { enviarMagicLink, type LoginState } from "@/lib/auth/actions";
+import {
+  enviarMagicLink,
+  iniciarConPassword,
+  type LoginState,
+} from "@/lib/auth/actions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -15,6 +19,51 @@ function SubmitButton() {
     <Button type="submit" className="w-full" disabled={pending}>
       {pending ? "Enviando…" : "Enviar enlace de acceso"}
     </Button>
+  );
+}
+
+function PasswordButton() {
+  const { pending } = useFormStatus();
+  return (
+    <Button type="submit" className="w-full" disabled={pending}>
+      {pending ? "Entrando…" : "Entrar con contraseña"}
+    </Button>
+  );
+}
+
+function PasswordForm() {
+  const [state, formAction] = useFormState(iniciarConPassword, initialState);
+  return (
+    <form action={formAction} className="space-y-4">
+      <div className="space-y-2">
+        <Label htmlFor="email-pwd">Correo</Label>
+        <Input
+          id="email-pwd"
+          name="email"
+          type="email"
+          autoComplete="email"
+          placeholder="tucorreo@demo.mx"
+          defaultValue={state.email ?? ""}
+          required
+        />
+      </div>
+      <div className="space-y-2">
+        <Label htmlFor="password">Contraseña</Label>
+        <Input
+          id="password"
+          name="password"
+          type="password"
+          autoComplete="current-password"
+          required
+        />
+      </div>
+      {state.error ? (
+        <p className="text-sm text-alerta" role="alert">
+          {state.error}
+        </p>
+      ) : null}
+      <PasswordButton />
+    </form>
   );
 }
 
@@ -72,6 +121,14 @@ export function LoginForm() {
         <p className="mt-6 text-center text-xs text-filo">
           Te enviaremos un enlace mágico por correo. Sin contraseña.
         </p>
+
+        <div className="my-6 flex items-center gap-3">
+          <div className="h-px flex-1 bg-filo/20" />
+          <span className="text-xs uppercase tracking-wide text-filo">o</span>
+          <div className="h-px flex-1 bg-filo/20" />
+        </div>
+
+        <PasswordForm />
       </CardContent>
     </Card>
   );
