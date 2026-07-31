@@ -1,21 +1,33 @@
 import { NextResponse } from "next/server";
+import { createServerClient } from "@supabase/ssr";
 
-// TEMPORAL: diagnóstico de variables de entorno en producción.
-// No expone secretos: solo longitudes y prefijos.
+// TEMPORAL: diagnóstico de env vars + login server-side en producción.
 export async function GET() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL ?? "";
   const anon = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "";
-  const service = process.env.SUPABASE_SERVICE_ROLE_KEY ?? "";
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "";
+
+  // Intento de login igual que la app (sin cookies persistentes).
+  let loginResultado = "no probado";
+  try {
+    const supabase = createServerClient(url, anon, {
+      cookies: { getAll: () => [], setAll: () => {} },
+    });
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email: "papa.perez@example.com",
+      password: "Demo1234!",
+    });
+    loginResultado = error
+      ? `ERROR: ${error.message} (${error.status})`
+      : `OK sesion=${!!data.session}`;
+  } catch (e) {
+    loginResultado = `EXCEPCION: ${(e as Error).message}`;
+  }
 
   return NextResponse.json({
-    urlPresente: url.length > 0,
     urlValor: url,
-    anonPresente: anon.length > 0,
+    urlTrimDistinto: url !== url.trim(),
     anonLargo: anon.length,
     anonTrimDistinto: anon !== anon.trim(),
-    servicePresente: service.length > 0,
-    serviceLargo: service.length,
-    appUrl,
+    loginResultado,
   });
 }
